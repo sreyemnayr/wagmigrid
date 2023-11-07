@@ -1,83 +1,104 @@
+import React from "react";
 import type { NextPage } from "next";
 import { Button } from "../components/Button";
+import { CategoryLabel } from "@/components/CategoryLabel";
+import { GuessBox } from "@/components/GuessBox";
 import { ArticlesList, getArticlePath } from "./a/[slug]";
+import { GuessModal } from "@/components/GuessModal";
+
+// import winners from "@/data/winners.json";
+
+interface Winner {
+  [key: string]: {
+    [key: string]: number[];
+  };
+}
+
+
+const winners: Winner = require("@/data/winners.json");
+
+
 
 const Home: NextPage = () => {
+
+  const [guessModalParams, setGuessModalParams] = React.useState({ side_trait: "", top_trait: "", open: false });
+
+  interface Guesses {
+    [key: string]: {
+      [key: string]: string;
+    };
+  }
+
+  const [results, setResults] = React.useState<Guesses>({
+    Background: {
+      Alien: '',
+      Flower: '',
+      Zombie: '',
+    },
+    Crown: {
+      Alien: '',
+      Flower: '',
+      Zombie: '',
+    },
+    Glasses: {
+      Alien: '',
+      Flower: '',
+      Zombie: '',
+    },
+  });
+
+  const [guessCounter, setGuessCounter] = React.useState(0);
+
+  const openGuessModal = (side_trait: string, top_trait: string) => {
+    setGuessModalParams({ side_trait, top_trait, open: true });
+  }
+
+  const closeGuessModal = () => {
+    setGuessModalParams((cur) => ({ side_trait: cur.side_trait, top_trait: cur.side_trait, open: false }));
+  }
+
+  const checkGuess = (guess: number, side_trait: string, top_trait: string, img: string) => {
+    if (((winners?.[side_trait] || [])?.[top_trait] as number[] || []).includes(guess)) {
+      setResults((cur: Guesses) => ({ ...cur, [side_trait]: { ...cur[side_trait], [top_trait]: img } }));
+    }
+    setGuessCounter((cur) => cur + 1);
+
+    closeGuessModal();
+  }
+
   return (
+
+
     <div className="my-auto max-w-2xl mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
-      <img
-        className="object-cover w-full h-64"
-        src="https://images.unsplash.com/photo-1550439062-609e1531270e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-        alt="Article"
-      />
 
-      <div className="p-6">
-        <div>
-          <span className="text-xs font-medium text-blue-600 uppercase dark:text-blue-400">
-            Product
-          </span>
-          <a
-            href="#"
-            className="block mt-2 text-2xl font-semibold text-gray-800 transition-colors duration-200 transform dark:text-white hover:text-gray-600 hover:underline"
-          >
-            I Built A Successful Blog In One Year
-          </a>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Molestie
-            parturient et sem ipsum volutpat vel. Natoque sem et aliquam mauris
-            egestas quam volutpat viverra. In pretium nec senectus erat. Et
-            malesuada lobortis.
-          </p>
-        </div>
+      <h2>WAGMI Grid</h2>
+      <GuessModal open={guessModalParams.open} side_trait={guessModalParams.side_trait} top_trait={guessModalParams.top_trait} checkGuess={checkGuess} />
 
-        <div className="mt-4">
-          <div className="flex items-center">
-            <div className="flex items-center">
-              <img
-                className="object-cover h-10 rounded-full"
-                src="https://images.unsplash.com/photo-1586287011575-a23134f797f9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=48&q=60"
-                alt="Avatar"
-              />
-              <a
-                href="#"
-                className="mx-2 font-semibold text-gray-700 dark:text-gray-200"
-              >
-                Jone Doe
-              </a>
-            </div>
-            <span className="mx-1 text-xs text-gray-600 dark:text-gray-300">
-              1 SEP 2022
-            </span>
-          </div>
-        </div>
+      <div className="grid grid-cols-4 grid-rows-4 gap-0 w-fit">
+        <div className="">{guessCounter}</div>
+        <CategoryLabel label="Alien" />
+        <CategoryLabel label="Flower" />
+        <CategoryLabel label="Zombie" />
+
+        <CategoryLabel label="Background" />
+        <GuessBox side_trait="Background" top_trait="Alien" openGuessModal={openGuessModal} image={results.Background.Alien} />
+        <GuessBox side_trait="Background" top_trait="Flower" openGuessModal={openGuessModal} image={results.Background.Flower} />
+        <GuessBox side_trait="Background" top_trait="Zombie" openGuessModal={openGuessModal} image={results.Background.Zombie} />
+
+        <CategoryLabel label="Crown" />
+        <GuessBox side_trait="Crown" top_trait="Alien" openGuessModal={openGuessModal} image={results.Crown.Alien} />
+        <GuessBox side_trait="Crown" top_trait="Flower" openGuessModal={openGuessModal} image={results.Crown.Flower} />
+        <GuessBox side_trait="Crown" top_trait="Zombie" openGuessModal={openGuessModal} image={results.Crown.Zombie} />
+
+        <CategoryLabel label="Glasses" />
+        <GuessBox side_trait="Glasses" top_trait="Alien" openGuessModal={openGuessModal} image={results.Glasses.Alien} />
+        <GuessBox side_trait="Glasses" top_trait="Flower" openGuessModal={openGuessModal} image={results.Glasses.Flower} />
+        <GuessBox side_trait="Glasses" top_trait="Zombie" openGuessModal={openGuessModal} image={results.Glasses.Zombie} />
+
       </div>
-
-      <article className="prose lg:prose-xl p-6">
-        <h3>Garlic bread with cheese: What the science tells us</h3>
-        <p>
-          For years parents have espoused the health benefits of eating garlic
-          bread with cheese to their children, with the food earning such an
-          iconic status in our culture that kids will often dress up as warm,
-          cheesy loaf for Halloween.
-        </p>
-        <p>
-          But a recent study shows that the celebrated appetizer may be linked
-          to a series of rabies cases springing up around the country.
-        </p>
-        <Button>Read more</Button>
-      </article>
-
-      <div className="flex flex-row gap-2 p-6">
-        {ArticlesList.map((slug) => {
-          return (
-            <div key={slug}>
-              <a href={getArticlePath(slug)}>
-                <Button>{slug}</Button>
-              </a>
-            </div>
-          );
-        })}
-      </div>
+      <textarea className="w-full" >
+        {JSON.stringify(results)}
+      </textarea>
     </div>
   );
 };
