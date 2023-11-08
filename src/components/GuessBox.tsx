@@ -9,6 +9,7 @@ interface GuessBoxProps {
     openGuessModal: (side_trait: any, top_trait: any) => void;
     top_guess?: number;
     give_up?: boolean;
+    number_possible?: number;
 }
 
 const corners: {
@@ -30,7 +31,7 @@ interface Collection {
 
 const collections: Collection[] = require('@/data/collections.json');
 
-export const GuessBox: React.FC<GuessBoxProps> = ({ side_trait, top_trait, guess, image, corner, openGuessModal, top_guess, give_up }) => {
+export const GuessBox: React.FC<GuessBoxProps> = ({ side_trait, top_trait, guess, image, corner, openGuessModal, top_guess, give_up, number_possible }) => {
     const handleClick = () => {
         if (!image) {
             openGuessModal(side_trait, top_trait);
@@ -46,6 +47,9 @@ export const GuessBox: React.FC<GuessBoxProps> = ({ side_trait, top_trait, guess
             {image !== "" && (
                 <>
                     <img src={image} alt="" className={`w-full h-full object-cover ${corner ? corners[corner] : ''}`} />
+                    <div className="absolute top-0 right-0 w-fit aspect-square bg-black text-white opacity-50">
+                        {number_possible}
+                    </div>
                     <div className="absolute bottom-0 left-0 w-full  bg-black text-white opacity-50">
                         {collections.find((collection) => collection.image === image)?.name || ""}
                     </div>
@@ -54,7 +58,10 @@ export const GuessBox: React.FC<GuessBoxProps> = ({ side_trait, top_trait, guess
             {image === "" && give_up && (
                 <>
                     <img src={collections.find((collection) => collection.id === top_guess)?.image || ""} alt="" className={`w-full h-full  object-cover ${corner ? corners[corner] : ''}`} />
-                    <div className="absolute bottom-0 left-0 w-full  bg-black text-white opacity-50">
+                    <div className={`absolute top-0 right-0 grid place-content-center w-8 aspect-square bg-black text-white opacity-50  rounded-full align-center`}>
+                        {number_possible}
+                    </div>
+                    <div className={`absolute bottom-0 left-0 w-full  bg-black text-white opacity-50  ${corner ? corners[corner] : ''}`}>
                         {collections.find((collection) => collection.id === top_guess)?.name || ""}
                     </div>
                 </>

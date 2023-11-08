@@ -27,6 +27,8 @@ export const GuessModal: React.FC<GuessModalProps> = ({ side_trait, top_trait, o
     const [query, setQuery] = React.useState('')
     const [selected, setSelected] = React.useState<Collection | undefined>(undefined)
 
+    const [shareText, setShareText] = React.useState('')
+
     React.useEffect(() => {
         setGuess('')
         setQuery('')
@@ -52,6 +54,10 @@ export const GuessModal: React.FC<GuessModalProps> = ({ side_trait, top_trait, o
 
 
     }, [guess])
+
+    React.useEffect(() => {
+        setShareText(encodeURI(`Hey @PlaguePoppets, I tried to guess ${query} on the Immaculate Vibes Grid today, but it was missing! Can you add it?`))
+    }, [query])
 
     const inputRef = React.useRef<HTMLInputElement>(null)
 
@@ -81,8 +87,12 @@ export const GuessModal: React.FC<GuessModalProps> = ({ side_trait, top_trait, o
 
                     <Combobox value={selected} onChange={setSelected}  >
                         <div className="relative mt-1">
-                            <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
-                                <Combobox.Button as="div">
+                            <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-slate-100 text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+
+                                <Combobox.Button as="div" className="bg-slate-100">
+                                    <div className="relative  hover:bg-slate-600 bg-slate-700 rounded-tl-lg rounded-tr-lg px-3 py-2 text-slate-100">
+                                        Choose an NFT Collection that satisfies: {side_trait} x {top_trait}
+                                    </div>
                                     <Combobox.Input
                                         className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
                                         displayValue={(collection?: Collection) => collection?.name || ''}
@@ -90,7 +100,7 @@ export const GuessModal: React.FC<GuessModalProps> = ({ side_trait, top_trait, o
                                         ref={inputRef}
                                     />
                                 </Combobox.Button>
-                                <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+                                <Combobox.Button className="absolute bottom-0 right-0 flex items-center pr-2 pb-2">
                                     <ChevronUpDownIcon
                                         className="h-5 w-5 text-gray-400"
                                         aria-hidden="true"
@@ -105,10 +115,14 @@ export const GuessModal: React.FC<GuessModalProps> = ({ side_trait, top_trait, o
                                 leaveTo="opacity-0"
                                 afterLeave={() => { setQuery(''); setSelected(undefined); setGuess('') }}
                             >
-                                <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                                <Combobox.Options className="absolute mt-1 max-h-96 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
                                     {filteredCollections.length === 0 && query !== '' ? (
-                                        <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+                                        <div className="relative cursor-default select-none py-2 px-4 text-gray-700 w-full flex flex-row justify-between">
                                             Nothing found.
+                                            <a className=" px-4 py-2 my-2 text-center text-white text-sm font-bold bg-blue-500 border-2 border-black rounded-lg shadow-[5px_5px_0px_0px_rgba(0,0,0)] transform transition-all duration-300 scale-90 hover:bg-white hover:text-blue-500 hover:border-blue-500 hover:shadow-blue-500 hover:scale-100 active:bg-yellow-300 active:shadow-none active:translate-y-1"
+                                                href={`https://twitter.com/intent/tweet?text=${shareText}&url=https://wagmigrid.vercel.app`}
+                                                target="_blank"
+                                            >Let us know!</a>
                                         </div>
                                     ) : (
                                         filteredCollections.map((collection) => (

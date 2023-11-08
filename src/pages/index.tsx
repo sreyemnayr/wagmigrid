@@ -29,6 +29,8 @@ interface GuessesDefaults {
   };
 }
 
+const puzzles: string[][] = require("@/data/puzzles.json")
+
 const generateGridString = (guesses: Guesses) => {
   let gridString = "";
 
@@ -42,16 +44,16 @@ const generateGridString = (guesses: Guesses) => {
   return gridString;
 };
 
-const generateShareText = (guesses: Guesses, numberOfGuesses: number = 9, wagmi: boolean = false) => {
+const generateShareText = (guesses: Guesses, numberOfGuesses: number = 9, wagmi: boolean = false, puzzle_number: number) => {
 
-  let shareText = "";
+  let shareText = `Grid #${puzzle_number}:\n}`;
 
   const numberCorrect = Object.keys(guesses).reduce((acc, side_trait) => {
     return acc + Object.keys(guesses[side_trait]).reduce((acc, top_trait) => {
       return acc + (guesses[side_trait][top_trait] ? 1 : 0);
     }, 0);
   }, 0);
-  shareText = "\n";
+  shareText += "\n";
   if (numberCorrect == 9) {
 
     shareText += "9/9 IMMACULATE"
@@ -115,11 +117,29 @@ const Home: NextPage = () => {
 
   const [results, setResults] = React.useState<Guesses>({});
   const [topChoices, setTopChoices] = React.useState<GuessesDefaults>({});
+  const [numberPossible, setNumberPossible] = React.useState<GuessesDefaults>({});
+
+  const [activePuzzle, setActivePuzzle] = React.useState<string[]>([]);
+  const [activePuzzleIndex, setActivePuzzleIndex] = React.useState<number>(0);
 
   React.useEffect(() => {
-    setSideTraits(["Background", "Airdrop / Free Mints", "Glasses"]);
-    setTopTraits(["Cigar", "Flower", "3D Glasses"]);
+    // choose random puzzle
+    // setActivePuzzleIndex(Math.floor(Math.random() * puzzles.length));
+    setActivePuzzleIndex(puzzles.length - 1);
+
   }, []);
+
+  React.useEffect(() => {
+    setActivePuzzle(puzzles[activePuzzleIndex])
+  }, [activePuzzleIndex])
+
+
+
+  React.useEffect(() => {
+    setSideTraits(activePuzzle.slice(0, 3));
+    setTopTraits(activePuzzle.slice(3, 6));
+
+  }, [JSON.stringify(activePuzzle)]);
 
   React.useEffect(() => {
     if (side_traits.length > 0 && top_traits.length > 0) {
@@ -141,9 +161,6 @@ const Home: NextPage = () => {
         },
       });
 
-      shuffle(trait_criteria[side_traits[0]]);
-      shuffle(trait_criteria[side_traits[1]]);
-      shuffle(trait_criteria[side_traits[2]]);
 
       const top_choices: GuessesDefaults = {
         [side_traits[0]]: {
@@ -163,27 +180,75 @@ const Home: NextPage = () => {
         },
       }
 
-      top_choices[side_traits[0]][top_traits[0]] = trait_criteria[side_traits[0]].find((id) => trait_criteria[top_traits[0]].includes(id)) || 0;
-      top_choices[side_traits[1]][top_traits[0]] = trait_criteria[side_traits[1]].find((id) => trait_criteria[top_traits[0]].includes(id)) || 0;
-      top_choices[side_traits[2]][top_traits[0]] = trait_criteria[side_traits[2]].find((id) => trait_criteria[top_traits[0]].includes(id)) || 0;
+      const num_possible: GuessesDefaults = {
+        [side_traits[0]]: {
+          [top_traits[0]]: 0,
+          [top_traits[1]]: 0,
+          [top_traits[2]]: 0,
+        },
+        [side_traits[1]]: {
+          [top_traits[0]]: 0,
+          [top_traits[1]]: 0,
+          [top_traits[2]]: 0,
+        },
+        [side_traits[2]]: {
+          [top_traits[0]]: 0,
+          [top_traits[1]]: 0,
+          [top_traits[2]]: 0,
+        },
+      }
 
       shuffle(trait_criteria[side_traits[0]]);
       shuffle(trait_criteria[side_traits[1]]);
       shuffle(trait_criteria[side_traits[2]]);
 
-      top_choices[side_traits[0]][top_traits[1]] = trait_criteria[side_traits[0]].find((id) => trait_criteria[top_traits[1]].includes(id)) || 0;
-      top_choices[side_traits[1]][top_traits[1]] = trait_criteria[side_traits[1]].find((id) => trait_criteria[top_traits[1]].includes(id)) || 0;
-      top_choices[side_traits[2]][top_traits[1]] = trait_criteria[side_traits[2]].find((id) => trait_criteria[top_traits[1]].includes(id)) || 0;
+      let filtered: number[]
+      filtered = trait_criteria[side_traits[0]].filter((id) => trait_criteria[top_traits[0]].includes(id))
+      top_choices[side_traits[0]][top_traits[0]] = filtered[0];
+      num_possible[side_traits[0]][top_traits[0]] = filtered.length;
+
+      filtered = trait_criteria[side_traits[1]].filter((id) => trait_criteria[top_traits[0]].includes(id))
+      top_choices[side_traits[1]][top_traits[0]] = filtered[0];
+      num_possible[side_traits[1]][top_traits[0]] = filtered.length;
+
+      filtered = trait_criteria[side_traits[2]].filter((id) => trait_criteria[top_traits[0]].includes(id))
+      top_choices[side_traits[2]][top_traits[0]] = filtered[0];
+      num_possible[side_traits[2]][top_traits[0]] = filtered.length;
 
       shuffle(trait_criteria[side_traits[0]]);
       shuffle(trait_criteria[side_traits[1]]);
       shuffle(trait_criteria[side_traits[2]]);
 
-      top_choices[side_traits[0]][top_traits[2]] = trait_criteria[side_traits[0]].find((id) => trait_criteria[top_traits[2]].includes(id)) || 0;
-      top_choices[side_traits[1]][top_traits[2]] = trait_criteria[side_traits[1]].find((id) => trait_criteria[top_traits[2]].includes(id)) || 0;
-      top_choices[side_traits[2]][top_traits[2]] = trait_criteria[side_traits[2]].find((id) => trait_criteria[top_traits[2]].includes(id)) || 0;
+      filtered = trait_criteria[side_traits[0]].filter((id) => trait_criteria[top_traits[1]].includes(id))
+      top_choices[side_traits[0]][top_traits[1]] = filtered[0];
+      num_possible[side_traits[0]][top_traits[1]] = filtered.length;
+
+      filtered = trait_criteria[side_traits[1]].filter((id) => trait_criteria[top_traits[1]].includes(id))
+      top_choices[side_traits[1]][top_traits[1]] = filtered[0];
+      num_possible[side_traits[1]][top_traits[1]] = filtered.length;
+
+      filtered = trait_criteria[side_traits[2]].filter((id) => trait_criteria[top_traits[1]].includes(id))
+      top_choices[side_traits[2]][top_traits[1]] = filtered[0];
+      num_possible[side_traits[2]][top_traits[1]] = filtered.length;
+
+      shuffle(trait_criteria[side_traits[0]]);
+      shuffle(trait_criteria[side_traits[1]]);
+      shuffle(trait_criteria[side_traits[2]]);
+
+      filtered = trait_criteria[side_traits[0]].filter((id) => trait_criteria[top_traits[2]].includes(id))
+      top_choices[side_traits[0]][top_traits[2]] = filtered[0];
+      num_possible[side_traits[0]][top_traits[2]] = filtered.length;
+
+      filtered = trait_criteria[side_traits[1]].filter((id) => trait_criteria[top_traits[2]].includes(id))
+      top_choices[side_traits[1]][top_traits[2]] = filtered[0];
+      num_possible[side_traits[1]][top_traits[2]] = filtered.length;
+
+      filtered = trait_criteria[side_traits[2]].filter((id) => trait_criteria[top_traits[2]].includes(id))
+      top_choices[side_traits[2]][top_traits[2]] = filtered[0];
+      num_possible[side_traits[2]][top_traits[2]] = filtered.length;
 
       setTopChoices(top_choices);
+      setNumberPossible(num_possible);
 
     }
   }, [JSON.stringify(side_traits), JSON.stringify(top_traits)]);
@@ -218,7 +283,7 @@ const Home: NextPage = () => {
 
   React.useEffect(() => {
 
-    setShareText(generateShareText(results, guessCounter, wagmiMode));
+    setShareText(generateShareText(results, guessCounter, wagmiMode, activePuzzleIndex + 1));
   }, [results]);
 
   const [showRules, setShowRules] = React.useState(false);
@@ -230,10 +295,13 @@ const Home: NextPage = () => {
 
     <div className={`my-auto w-[100vw] h-[100vh] grid place-content-center mx-auto overflow-hidden bg-gray-200 rounded-lg shadow-md dark:bg-gray-800 text-slate-800 dark:text-slate-200 ${asap.className}`}>
 
+
       <div className="flex flex-col md:flex-row"><Poppet className="hidden md:inline h-[6em]" /><div className="flex flex-col"><h2 className="w-full text-center text-[3em] leading-none">Immaculate <span className={`${titan.className} block md:inline`}>Vibes</span> Grid</h2>
         <h3 className="w-full text-left text-[1.6em] text-slate-600"><Poppet className="inline md:hidden h-[3em]" />presented by plague poppets ( <a href="https://plaguepoppets.io/mint" className="underline" target="_blank">minting now!</a> )</h3></div></div>
       <GuessModal open={guessModalParams.open} side_trait={guessModalParams.side_trait} top_trait={guessModalParams.top_trait} checkGuess={checkGuess} closeModal={closeGuessModal} already_guessed={alreadyGuessed} />
       <RulesModal open={showRules} />
+
+
 
       <div className="my-auto grid grid-cols-5 grid-rows-5 gap-px w-[80vh] max-w-[95vw] md:max-w-[80vw] aspect-square text-xs md:text-sm grid-flow-dense">
         <div></div>
@@ -243,9 +311,9 @@ const Home: NextPage = () => {
         <div></div>
 
         <CategoryLabel label={side_traits[0]} />
-        <GuessBox side_trait={side_traits[0]} top_trait={top_traits[0]} openGuessModal={openGuessModal} image={results?.[side_traits[0]]?.[top_traits[0]]} corner="tl" top_guess={topChoices?.[side_traits[0]]?.[top_traits[0]]} give_up={giveUp} />
-        <GuessBox side_trait={side_traits[0]} top_trait={top_traits[1]} openGuessModal={openGuessModal} image={results?.[side_traits[0]]?.[top_traits[1]]} top_guess={topChoices?.[side_traits[0]]?.[top_traits[1]]} give_up={giveUp} />
-        <GuessBox side_trait={side_traits[0]} top_trait={top_traits[2]} openGuessModal={openGuessModal} image={results?.[side_traits[0]]?.[top_traits[2]]} corner="tr" top_guess={topChoices?.[side_traits[0]]?.[top_traits[2]]} give_up={giveUp} />
+        <GuessBox side_trait={side_traits[0]} top_trait={top_traits[0]} openGuessModal={openGuessModal} image={results?.[side_traits[0]]?.[top_traits[0]]} corner="tl" top_guess={topChoices?.[side_traits[0]]?.[top_traits[0]]} give_up={giveUp} number_possible={numberPossible?.[side_traits[0]]?.[top_traits[0]]} />
+        <GuessBox side_trait={side_traits[0]} top_trait={top_traits[1]} openGuessModal={openGuessModal} image={results?.[side_traits[0]]?.[top_traits[1]]} top_guess={topChoices?.[side_traits[0]]?.[top_traits[1]]} give_up={giveUp} number_possible={numberPossible?.[side_traits[0]]?.[top_traits[1]]} />
+        <GuessBox side_trait={side_traits[0]} top_trait={top_traits[2]} openGuessModal={openGuessModal} image={results?.[side_traits[0]]?.[top_traits[2]]} corner="tr" top_guess={topChoices?.[side_traits[0]]?.[top_traits[2]]} give_up={giveUp} number_possible={numberPossible?.[side_traits[0]]?.[top_traits[2]]} />
 
         <div className="w-full grid place-content-center row-span-3"><div className="text-center text-xs uppercase">guesses left</div><div className="text-center md:text-4xl">{wagmiMode ? '∞' : 9 - guessCounter}</div>
 
@@ -267,15 +335,15 @@ const Home: NextPage = () => {
 
 
         <CategoryLabel label={side_traits[1]} />
-        <GuessBox side_trait={side_traits[1]} top_trait={top_traits[0]} openGuessModal={openGuessModal} image={results?.[side_traits[1]]?.[top_traits[0]]} top_guess={topChoices?.[side_traits[1]]?.[top_traits[0]]} give_up={giveUp} />
-        <GuessBox side_trait={side_traits[1]} top_trait={top_traits[1]} openGuessModal={openGuessModal} image={results?.[side_traits[1]]?.[top_traits[1]]} top_guess={topChoices?.[side_traits[1]]?.[top_traits[1]]} give_up={giveUp} />
-        <GuessBox side_trait={side_traits[1]} top_trait={top_traits[2]} openGuessModal={openGuessModal} image={results?.[side_traits[1]]?.[top_traits[2]]} top_guess={topChoices?.[side_traits[1]]?.[top_traits[2]]} give_up={giveUp} />
+        <GuessBox side_trait={side_traits[1]} top_trait={top_traits[0]} openGuessModal={openGuessModal} image={results?.[side_traits[1]]?.[top_traits[0]]} top_guess={topChoices?.[side_traits[1]]?.[top_traits[0]]} give_up={giveUp} number_possible={numberPossible?.[side_traits[1]]?.[top_traits[0]]} />
+        <GuessBox side_trait={side_traits[1]} top_trait={top_traits[1]} openGuessModal={openGuessModal} image={results?.[side_traits[1]]?.[top_traits[1]]} top_guess={topChoices?.[side_traits[1]]?.[top_traits[1]]} give_up={giveUp} number_possible={numberPossible?.[side_traits[1]]?.[top_traits[1]]} />
+        <GuessBox side_trait={side_traits[1]} top_trait={top_traits[2]} openGuessModal={openGuessModal} image={results?.[side_traits[1]]?.[top_traits[2]]} top_guess={topChoices?.[side_traits[1]]?.[top_traits[2]]} give_up={giveUp} number_possible={numberPossible?.[side_traits[1]]?.[top_traits[2]]} />
 
 
         <CategoryLabel label={side_traits[2]} />
-        <GuessBox side_trait={side_traits[2]} top_trait={top_traits[0]} openGuessModal={openGuessModal} image={results?.[side_traits[2]]?.[top_traits[0]]} corner="bl" top_guess={topChoices?.[side_traits[2]]?.[top_traits[0]]} give_up={giveUp} />
-        <GuessBox side_trait={side_traits[2]} top_trait={top_traits[1]} openGuessModal={openGuessModal} image={results?.[side_traits[2]]?.[top_traits[1]]} top_guess={topChoices?.[side_traits[2]]?.[top_traits[1]]} give_up={giveUp} />
-        <GuessBox side_trait={side_traits[2]} top_trait={top_traits[2]} openGuessModal={openGuessModal} image={results?.[side_traits[2]]?.[top_traits[2]]} corner="br" top_guess={topChoices?.[side_traits[2]]?.[top_traits[2]]} give_up={giveUp} />
+        <GuessBox side_trait={side_traits[2]} top_trait={top_traits[0]} openGuessModal={openGuessModal} image={results?.[side_traits[2]]?.[top_traits[0]]} corner="bl" top_guess={topChoices?.[side_traits[2]]?.[top_traits[0]]} give_up={giveUp} number_possible={numberPossible?.[side_traits[2]]?.[top_traits[0]]} />
+        <GuessBox side_trait={side_traits[2]} top_trait={top_traits[1]} openGuessModal={openGuessModal} image={results?.[side_traits[2]]?.[top_traits[1]]} top_guess={topChoices?.[side_traits[2]]?.[top_traits[1]]} give_up={giveUp} number_possible={numberPossible?.[side_traits[2]]?.[top_traits[1]]} />
+        <GuessBox side_trait={side_traits[2]} top_trait={top_traits[2]} openGuessModal={openGuessModal} image={results?.[side_traits[2]]?.[top_traits[2]]} corner="br" top_guess={topChoices?.[side_traits[2]]?.[top_traits[2]]} give_up={giveUp} number_possible={numberPossible?.[side_traits[2]]?.[top_traits[2]]} />
 
         <div></div>
         <div className="col-span-3 flex flex-row items-center justify-center">
@@ -298,10 +366,14 @@ const Home: NextPage = () => {
           )}
           <FlashMessage show={wagmiMode} />
 
+
         </div>
         <div></div>
 
 
+      </div>
+      <div className="flex flex-row justify-center items-center">
+        You&apos;re playing puzzle #{activePuzzleIndex + 1} of {puzzles.length} ( <button className="underline" onClick={() => { setGuessCounter(0); setWagmiMode(false); setGiveup(false); setActivePuzzleIndex(Math.floor(Math.random() * puzzles.length)); }}>try another</button> )
       </div>
     </div>
   );
