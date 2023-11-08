@@ -79,7 +79,7 @@ export const GuessModal: React.FC<GuessModalProps> = ({ side_trait, top_trait, o
         <Transition appear show={open} as={React.Fragment}>
             <Dialog
                 as="div"
-                className="fixed inset-24 z-10 overflow-hidden"
+                className="fixed inset-0 md:inset-24 z-10 overflow-hidden"
                 onClose={closeModal}
             >
                 <div className="min-h-screen px-4 text-center">
@@ -94,7 +94,7 @@ export const GuessModal: React.FC<GuessModalProps> = ({ side_trait, top_trait, o
                                         Choose an NFT Collection that satisfies: {side_trait} x {top_trait}
                                     </div>
                                     <Combobox.Input
-                                        className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
+                                        className="w-full border-none py-2 pl-3 pr-10 text-[16px]md:text-sm leading-5 text-gray-900 focus:ring-0"
                                         displayValue={(collection?: Collection) => collection?.name || ''}
                                         onChange={(event) => setQuery(event.target.value)}
                                         placeholder="Begin typing to search..."
