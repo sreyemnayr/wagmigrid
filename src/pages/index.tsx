@@ -5,6 +5,7 @@ import { CategoryLabel } from "@/components/CategoryLabel";
 import { GuessBox } from "@/components/GuessBox";
 import { ArticlesList, getArticlePath } from "./a/[slug]";
 import { GuessModal } from "@/components/GuessModal";
+import { RulesModal } from "@/components/RulesModal";
 
 // import winners from "@/data/winners.json";
 
@@ -69,13 +70,14 @@ const Home: NextPage = () => {
   return (
 
 
-    <div className="my-auto max-w-2xl mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <div className="my-auto w-[100vw] h-[100vh] grid place-content-center mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-200">
 
-      <h2>WAGMI Grid</h2>
+      <h2 className="w-full text-center text-[3em]">WAGMI Grid</h2>
       <GuessModal open={guessModalParams.open} side_trait={guessModalParams.side_trait} top_trait={guessModalParams.top_trait} checkGuess={checkGuess} />
+      <RulesModal />
 
-      <div className="grid grid-cols-4 grid-rows-4 gap-0 w-fit">
-        <div className="">{guessCounter}</div>
+      <div className="grid grid-cols-4 grid-rows-4 gap-0 w-fit max-w-[80vh] max-h-[80vh]">
+        <div className="w-full grid place-content-center"><span className="text-center text-xl">{9 - guessCounter}</span><span className="text-center">guesses</span><span>remaining</span></div>
         <CategoryLabel label="Alien" />
         <CategoryLabel label="Flower" />
         <CategoryLabel label="Zombie" />
@@ -96,9 +98,6 @@ const Home: NextPage = () => {
         <GuessBox side_trait="Glasses" top_trait="Zombie" openGuessModal={openGuessModal} image={results.Glasses.Zombie} />
 
       </div>
-      <textarea className="w-full" >
-        {JSON.stringify(results)}
-      </textarea>
     </div>
   );
 };

@@ -17,7 +17,7 @@ export const GuessBox: React.FC<GuessBoxProps> = ({ side_trait, top_trait, guess
 
     return (
         <button
-            className="w-36 h-36 border-2 border-solid border-rounded border-gray-300"
+            className="w-full h-full border-2 border-solid border-rounded border-gray-300 hover:bg-green-300"
             disabled={!!image}
             onClick={handleClick}
         >
