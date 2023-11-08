@@ -28,11 +28,18 @@
       ],
       "@/data/*": [
         "data/*"
+      ],
+      "@/util/*": [
+        "util/*"
+      ],
+      "@/assets/*": [
+        "assets/*"
       ]
     }
   },
   "include": [
     "next-env.d.ts",
+    "modules.d.ts",
     "**/*.ts",
     "**/*.tsx"
   ],
