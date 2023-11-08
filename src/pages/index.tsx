@@ -46,14 +46,14 @@ const generateGridString = (guesses: Guesses) => {
 
 const generateShareText = (guesses: Guesses, numberOfGuesses: number = 9, wagmi: boolean = false, puzzle_number: number) => {
 
-  let shareText = `Grid #${puzzle_number}:\n}`;
+  let shareText = `Grid #${puzzle_number}: `;
 
   const numberCorrect = Object.keys(guesses).reduce((acc, side_trait) => {
     return acc + Object.keys(guesses[side_trait]).reduce((acc, top_trait) => {
       return acc + (guesses[side_trait][top_trait] ? 1 : 0);
     }, 0);
   }, 0);
-  shareText += "\n";
+
   if (numberCorrect == 9) {
 
     shareText += "9/9 IMMACULATE"
