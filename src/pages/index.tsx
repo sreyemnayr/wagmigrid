@@ -297,7 +297,7 @@ const Home: NextPage = () => {
 
 
       <div className="flex flex-col md:flex-row"><Poppet className="hidden md:inline h-[6em]" /><div className="flex flex-col"><h2 className="w-full text-center text-[3em] leading-none">Immaculate <span className={`${titan.className} block md:inline`}>Vibes</span> Grid</h2>
-        <h3 className="w-full text-left text-[1.6em] text-slate-600"><Poppet className="inline md:hidden h-[3em]" />presented by plague poppets ( <a href="https://plaguepoppets.io/mint" className="underline" target="_blank">minting now!</a> )</h3></div></div>
+        <h3 className="w-full text-left text-sm md:text-[1.6em] text-slate-600"><Poppet className="inline md:hidden h-[2em]" />presented by plague poppets ( <a href="https://plaguepoppets.io/mint" className="underline" target="_blank">minting now!</a> )</h3></div></div>
       <GuessModal open={guessModalParams.open} side_trait={guessModalParams.side_trait} top_trait={guessModalParams.top_trait} checkGuess={checkGuess} closeModal={closeGuessModal} already_guessed={alreadyGuessed} />
       <RulesModal open={showRules} />
 
