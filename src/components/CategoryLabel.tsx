@@ -5,7 +5,8 @@ interface CategoryLabelProps {
 }
 
 export const CategoryLabel: React.FC<CategoryLabelProps> = ({ label }) => {
-    return <div className="grid place-content-center w-full h-full  bg-blue-500 text-white rounded">{label}</div>;
+    return <div className="p-2 grid place-content-center w-full aspect-square border-2 border-solid border-blue-800 text-blue-800 text-xs md:text-sm">
+        {label}</div>;
 };
 
 export default CategoryLabel;
