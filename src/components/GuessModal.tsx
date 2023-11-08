@@ -63,7 +63,7 @@ export const GuessModal: React.FC<GuessModalProps> = ({ side_trait, top_trait, o
 
     const filteredCollections =
         query === ''
-            ? collections.filter((collection) => { return !already_guessed.includes(collection.id) }).slice(0, 10)
+            ? []
             : collections.filter((collection) => { return !already_guessed.includes(collection.id) }).filter((collection) => {
 
                 return collection.name.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, ''))
@@ -97,6 +97,7 @@ export const GuessModal: React.FC<GuessModalProps> = ({ side_trait, top_trait, o
                                         className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
                                         displayValue={(collection?: Collection) => collection?.name || ''}
                                         onChange={(event) => setQuery(event.target.value)}
+                                        placeholder="Begin typing to search..."
                                         ref={inputRef}
                                     />
                                 </Combobox.Button>

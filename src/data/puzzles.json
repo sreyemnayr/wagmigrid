@@ -8,14 +8,6 @@
         "3D Glasses"
     ],
     [
-        ">500 ETH Volume",
-        ">5k ETH Volume",
-        ">25k ETH Volume",
-        "Crown",
-        "On-Chain Metadata",
-        "Mask"
-    ],
-    [
         "IPFS Metadata",
         "Airdrop / Free Mints",
         "Background",
@@ -46,5 +38,13 @@
         "Hat",
         "Robot",
         "Mohawk"
+    ],
+    [
+        ">500 ETH Volume",
+        ">5k ETH Volume",
+        ">25k ETH Volume",
+        "Crown",
+        "On-Chain Metadata",
+        "Mask"
     ]
 ]
