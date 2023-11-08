@@ -76,7 +76,7 @@ const Home: NextPage = () => {
       <GuessModal open={guessModalParams.open} side_trait={guessModalParams.side_trait} top_trait={guessModalParams.top_trait} checkGuess={checkGuess} />
       <RulesModal />
 
-      <div className="grid grid-cols-4 grid-rows-4 gap-0 w-fit max-w-[80vh] max-h-[80vh]">
+      <div className="grid grid-cols-4 grid-rows-4 gap-0 w-fit max-w-[80vh] max-h-[80vh] w-[80vw] h-[80vw]">
         <div className="w-full grid place-content-center"><span className="text-center text-xl">{9 - guessCounter}</span><span className="text-center">guesses</span><span>remaining</span></div>
         <CategoryLabel label="Alien" />
         <CategoryLabel label="Flower" />
