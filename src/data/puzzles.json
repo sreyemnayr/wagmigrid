@@ -1,106 +1,130 @@
 [
     [
-        "Background",
+        "BACKGROUND",
         "Airdrop / Free Mints",
-        "Glasses",
-        "Cigar",
-        "Flower",
-        "3D Glasses"
+        "GLASSES",
+        "CIGAR",
+        "FLOWER",
+        "3D GLASSES"
     ],
     [
         "IPFS Metadata",
         "Airdrop / Free Mints",
-        "Background",
-        "Laser",
-        "Bandana",
-        "Bubblegum"
+        "BACKGROUND",
+        "LASER",
+        "BANDANA",
+        "BUBBLEGUM"
     ],
     [
-        "Helmet",
-        "Beanie",
-        "Cowboy",
-        "Eye Patch",
-        "Monocle",
-        "Glasses"
+        "BACKGROUND",
+        "DIAMOND",
+        "FIRE",
+        "EYES",
+        "GLASSES",
+        "HOODIE"
     ],
     [
-        "Suit",
+        "HELMET",
+        "BEANIE",
+        "COWBOY",
+        "EYE PATCH",
+        "MONOCLE",
+        "GLASSES"
+    ],
+    [
+        "SUIT",
         ">500 ETH Volume",
         "Mint Price: 0 ETH",
-        "Jacket",
+        "JACKET",
         ">2.5k ETH Volume",
         "Mint Price: 0 ETH"
     ],
     [
-        "Bunny",
-        "Hoodie",
-        "Fire",
-        "Hat",
-        "Robot",
-        "Mohawk"
+        "BUNNY",
+        "HOODIE",
+        "FIRE",
+        "HAT",
+        "ROBOT",
+        "MOHAWK"
     ],
     [
         ">500 ETH Volume",
         ">5k ETH Volume",
         ">25k ETH Volume",
-        "Crown",
+        "CROWN",
         "On-Chain Metadata",
-        "Mask"
+        "MASK"
     ],
     [
-        "Banana",
-        "Headband",
-        "Bandana",
-        "Gold",
-        "Rainbow",
-        "Earring"
+        "BANANA",
+        "HEADBAND",
+        "BANDANA",
+        "GOLD",
+        "RAINBOW",
+        "EARRING"
     ],
     [
-        "Fish",
-        "Cat",
-        "Dog",
-        "Baseball",
-        "Basketball",
-        "Ball"
+        "FISH",
+        "CAT",
+        "DOG",
+        "BASEBALL",
+        "BASKETBALL",
+        "BALL"
     ],
     [
-        "Devil",
-        "Fire",
-        "Skull",
-        "Halo",
-        "Wings",
-        "Gold"
+        "DEVIL",
+        "FIRE",
+        "SKULL",
+        "HALO",
+        "WINGS",
+        "GOLD"
     ],
     [
-        "Cigar",
-        "Cigarette",
-        "Bubblegum",
-        "Moon",
-        "Space",
-        "Astronaut"
+        "CIGAR",
+        "CIGARETTE",
+        "BUBBLEGUM",
+        "MOON",
+        "SPACE",
+        "ASTRONAUT"
     ],
     [
-        "Happy",
-        "Sad",
-        "Angry",
-        "Moon",
-        "Night",
-        "Sky"
+        "HAPPY",
+        "SAD",
+        "ANGRY",
+        "MOON",
+        "NIGHT",
+        "SKY"
     ],
     [
-        "Camo",
-        "Beret",
-        "Laser",
+        "CAMO",
+        "BERET",
+        "LASER",
         "3D",
         "VR",
-        "Goggles"
+        "GOGGLES"
     ],
     [
-        "Hat",
-        "Background",
-        "Glasses",
+        "HAT",
+        "BACKGROUND",
+        "GLASSES",
         ">500 ETH Volume",
         "IPFS Metadata",
         "Airdrop / Free Mints"
+    ],
+    [
+        "LIPS",
+        "TONGUE",
+        "TEETH",
+        "PIZZA",
+        "BANANA",
+        "BUBBLEGUM"
+    ],
+    [
+        "GOLD",
+        "CHAIN",
+        "HALO",
+        "SILVER",
+        "TEETH",
+        "FISH"
     ]
 ]

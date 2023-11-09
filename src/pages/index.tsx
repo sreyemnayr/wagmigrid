@@ -17,6 +17,10 @@ import { Poppet } from "@/assets/PoppetSVG";
 const asap = Asap_Condensed({ weight: "400", subsets: ['latin'] })
 const titan = Titan_One({ weight: "400", subsets: ['latin'] })
 
+const now = new Date();
+const fullDaysSinceEpoch = Math.floor(now.getTime() / 8.64e7);
+const puzzle_number = fullDaysSinceEpoch - 19668;
+
 interface Guesses {
   [key: string]: {
     [key: string]: string;
@@ -29,14 +33,17 @@ interface GuessesDefaults {
   };
 }
 
-const puzzles: string[][] = require("@/data/puzzles.json")
+const all_puzzles: string[][] = require("@/data/puzzles.json")
+const puzzles = all_puzzles.slice(0, puzzle_number + 1);
 
-const generateGridString = (guesses: Guesses) => {
+const total_collection_count = 2971;
+
+const generateGridString = (guesses: Guesses, wagmi: boolean = false) => {
   let gridString = "";
 
   Object.keys(guesses).forEach((side_trait) => {
     Object.keys(guesses[side_trait]).forEach((top_trait) => {
-      gridString += guesses[side_trait][top_trait] ? "🟪" : "⬜";
+      gridString += guesses[side_trait][top_trait] ? wagmi ? "🟪" : "🟩" : "⬜";
     });
     gridString += "\n";
   });
@@ -46,7 +53,7 @@ const generateGridString = (guesses: Guesses) => {
 
 const generateShareText = (guesses: Guesses, numberOfGuesses: number = 9, wagmi: boolean = false, puzzle_number: number) => {
 
-  let shareText = `Grid #${puzzle_number}: `;
+  let shareText = `#ImmaculateVibes Grid #${puzzle_number}: `;
 
   const numberCorrect = Object.keys(guesses).reduce((acc, side_trait) => {
     return acc + Object.keys(guesses[side_trait]).reduce((acc, top_trait) => {
@@ -69,13 +76,13 @@ const generateShareText = (guesses: Guesses, numberOfGuesses: number = 9, wagmi:
 
   shareText += "\n";
 
-  let gridString = generateGridString(guesses);
+  let gridString = generateGridString(guesses, wagmi);
 
   shareText += gridString;
 
   shareText += "\n";
 
-  shareText += "Play today's Immaculate Vibes Grid by @PlaguePoppets\n\n";
+  shareText += "Play today's grid by @PlaguePoppets at wagmigrid.com\n\n";
 
   if (wagmi) {
     shareText += `\n*in ${numberOfGuesses} guesses! WAGMI!\n`;
@@ -121,6 +128,7 @@ const Home: NextPage = () => {
 
   const [activePuzzle, setActivePuzzle] = React.useState<string[]>([]);
   const [activePuzzleIndex, setActivePuzzleIndex] = React.useState<number>(0);
+  const [activePuzzleDifficulty, setActivePuzzleDifficulty] = React.useState<number>(0);
 
   React.useEffect(() => {
     // choose random puzzle
@@ -161,7 +169,13 @@ const Home: NextPage = () => {
         },
       });
 
+    }
+  }, [JSON.stringify(side_traits), JSON.stringify(top_traits)]);
 
+  const [ping, setPing] = React.useState(false);
+
+  React.useEffect(() => {
+    if (side_traits.length > 0 && top_traits.length > 0) {
       const top_choices: GuessesDefaults = {
         [side_traits[0]]: {
           [top_traits[0]]: 0,
@@ -197,6 +211,7 @@ const Home: NextPage = () => {
           [top_traits[2]]: 0,
         },
       }
+      let total_num_possible = 0;
 
       shuffle(trait_criteria[side_traits[0]]);
       shuffle(trait_criteria[side_traits[1]]);
@@ -206,14 +221,17 @@ const Home: NextPage = () => {
       filtered = trait_criteria[side_traits[0]].filter((id) => trait_criteria[top_traits[0]].includes(id))
       top_choices[side_traits[0]][top_traits[0]] = filtered[0];
       num_possible[side_traits[0]][top_traits[0]] = filtered.length;
+      total_num_possible += filtered.length;
 
       filtered = trait_criteria[side_traits[1]].filter((id) => trait_criteria[top_traits[0]].includes(id))
       top_choices[side_traits[1]][top_traits[0]] = filtered[0];
       num_possible[side_traits[1]][top_traits[0]] = filtered.length;
+      total_num_possible += filtered.length;
 
       filtered = trait_criteria[side_traits[2]].filter((id) => trait_criteria[top_traits[0]].includes(id))
       top_choices[side_traits[2]][top_traits[0]] = filtered[0];
       num_possible[side_traits[2]][top_traits[0]] = filtered.length;
+      total_num_possible += filtered.length;
 
       shuffle(trait_criteria[side_traits[0]]);
       shuffle(trait_criteria[side_traits[1]]);
@@ -222,14 +240,17 @@ const Home: NextPage = () => {
       filtered = trait_criteria[side_traits[0]].filter((id) => trait_criteria[top_traits[1]].includes(id))
       top_choices[side_traits[0]][top_traits[1]] = filtered[0];
       num_possible[side_traits[0]][top_traits[1]] = filtered.length;
+      total_num_possible += filtered.length;
 
       filtered = trait_criteria[side_traits[1]].filter((id) => trait_criteria[top_traits[1]].includes(id))
       top_choices[side_traits[1]][top_traits[1]] = filtered[0];
       num_possible[side_traits[1]][top_traits[1]] = filtered.length;
+      total_num_possible += filtered.length;
 
       filtered = trait_criteria[side_traits[2]].filter((id) => trait_criteria[top_traits[1]].includes(id))
       top_choices[side_traits[2]][top_traits[1]] = filtered[0];
       num_possible[side_traits[2]][top_traits[1]] = filtered.length;
+      total_num_possible += filtered.length;
 
       shuffle(trait_criteria[side_traits[0]]);
       shuffle(trait_criteria[side_traits[1]]);
@@ -238,20 +259,24 @@ const Home: NextPage = () => {
       filtered = trait_criteria[side_traits[0]].filter((id) => trait_criteria[top_traits[2]].includes(id))
       top_choices[side_traits[0]][top_traits[2]] = filtered[0];
       num_possible[side_traits[0]][top_traits[2]] = filtered.length;
+      total_num_possible += filtered.length;
 
       filtered = trait_criteria[side_traits[1]].filter((id) => trait_criteria[top_traits[2]].includes(id))
       top_choices[side_traits[1]][top_traits[2]] = filtered[0];
       num_possible[side_traits[1]][top_traits[2]] = filtered.length;
+      total_num_possible += filtered.length;
 
       filtered = trait_criteria[side_traits[2]].filter((id) => trait_criteria[top_traits[2]].includes(id))
       top_choices[side_traits[2]][top_traits[2]] = filtered[0];
       num_possible[side_traits[2]][top_traits[2]] = filtered.length;
+      total_num_possible += filtered.length;
 
       setTopChoices(top_choices);
       setNumberPossible(num_possible);
+      setActivePuzzleDifficulty(((1 - total_num_possible / (total_collection_count * 1.5)) * 10) / 2 | 0)
 
     }
-  }, [JSON.stringify(side_traits), JSON.stringify(top_traits)]);
+  }, [JSON.stringify(side_traits), JSON.stringify(top_traits), ping]);
 
   const [guessCounter, setGuessCounter] = React.useState(0);
   const [wagmiMode, setWagmiMode] = React.useState(false);
@@ -260,6 +285,8 @@ const Home: NextPage = () => {
   const openGuessModal = (side_trait: string, top_trait: string) => {
     if (!giveUp && (wagmiMode || guessCounter < 9)) {
       setGuessModalParams({ side_trait, top_trait, open: true });
+    } else {
+      setPing((c) => !c);
     }
 
   }
@@ -285,6 +312,8 @@ const Home: NextPage = () => {
 
     setShareText(generateShareText(results, guessCounter, wagmiMode, activePuzzleIndex + 1));
   }, [results]);
+
+
 
   const [showRules, setShowRules] = React.useState(false);
 
@@ -319,15 +348,15 @@ const Home: NextPage = () => {
 
 
           {((!wagmiMode && guessCounter >= 9) || giveUp) && (
-            <a className=" px-4 py-2 text-center text-white text-sm font-bold bg-blue-500 border-2 border-black rounded-lg shadow-[5px_5px_0px_0px_rgba(0,0,0)] transform transition-all duration-300 scale-90 hover:bg-white hover:text-blue-500 hover:border-blue-500 hover:shadow-blue-500 hover:scale-100 active:bg-yellow-300 active:shadow-none active:translate-y-1"
-              href={`https://twitter.com/intent/tweet?text=${shareText}&url=https://wagmigrid.vercel.app`}
+            <a className=" px-4 py-2 text-center text-white text-sm font-bold bg-blue-500 border-2 border-black rounded-lg shadow-[5px_5px_0px_0px_rgba(0,0,0)] transform transition-all duration-300 scale-90 hover:bg-white hover:text-blue-500 hover:border-blue-500 hover:shadow-blue-500 hover:scale-100 active:bg-yellow-300 active:shadow-none active:translate-y-1 mb-4"
+              href={`https://twitter.com/intent/tweet?text=${shareText}`}
               target="_blank"
             >Share on X</a>
           )}
-          {(guessCounter < 9 || wagmiMode) && (!giveUp) && (
+          {!giveUp && (
             <button className=" px-4 py-2 text-center text-white text-sm font-bold bg-blue-500 border-2 border-black rounded-lg shadow-[5px_5px_0px_0px_rgba(0,0,0)] transform transition-all duration-300 scale-90 hover:bg-white hover:text-blue-500 hover:border-blue-500 hover:shadow-blue-500 hover:scale-100 active:bg-yellow-300 active:shadow-none active:translate-y-1"
               onClick={() => { setGiveup(true); }}
-            >Give Up</button>
+            >{(guessCounter < 9 || wagmiMode) ? 'NGMI' : 'Refresh Metadata'}</button>
           )}
 
 
@@ -353,7 +382,13 @@ const Home: NextPage = () => {
 
           {!wagmiMode && (
             <button type="button" className=" px-4 py-2 text-center text-white text-sm font-bold bg-red-500 border-2 border-black rounded-lg shadow-[5px_5px_0px_0px_rgba(0,0,0)] transform transition-all duration-300 scale-90 hover:bg-white hover:text-red-500 hover:border-red-500 hover:shadow-red-500 hover:scale-100 active:bg-yellow-300 active:shadow-none active:translate-y-1 h-fit"
-              onClick={() => { setWagmiMode(true); }}
+              onClick={() => {
+                if (!giveUp) {
+                  setWagmiMode(true);
+                } else {
+                  setGuessCounter(0); setWagmiMode(true); setGiveup(false);
+                }
+              }}
             >
               WAGMI
 
@@ -373,7 +408,7 @@ const Home: NextPage = () => {
 
       </div>
       <div className="flex flex-row justify-center items-center">
-        You&apos;re playing puzzle #{activePuzzleIndex + 1} of {puzzles.length} ( <button className="underline" onClick={() => { setGuessCounter(0); setWagmiMode(false); setGiveup(false); setActivePuzzleIndex(Math.floor(Math.random() * puzzles.length)); }}>try another</button> )
+        You&apos;re playing puzzle #{activePuzzleIndex + 1} of {puzzles.length} - Difficulty {activePuzzleDifficulty} ( <button className="underline" onClick={() => { setGuessCounter(0); setWagmiMode(false); setGiveup(false); setActivePuzzleIndex(Math.floor(Math.random() * puzzles.length)); }}>try another?</button> )
       </div>
     </div>
   );

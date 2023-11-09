@@ -86,7 +86,7 @@ export const GuessModal: React.FC<GuessModalProps> = ({ side_trait, top_trait, o
                     <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
 
                     <Combobox value={selected} onChange={setSelected}  >
-                        <div className="relative mt-1">
+                        <div className="relative mt-[70%] md:mt-1">
                             <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-slate-100 text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
 
                                 <Combobox.Button as="div" className="bg-slate-100">
