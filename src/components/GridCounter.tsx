@@ -2,21 +2,26 @@
 import React from "react";
 import { Button } from "./Button";
 
-interface GridCounterProps {
-  wagmiMode: boolean;
-  guessCounter: number;
-  giveUp: boolean;
-  shareText: string;
-  setGiveup: (value: boolean) => void;
-}
+import { useGridContext } from "@/context/GridContext";
+import { generateShareText } from "@/util/util";
 
-export const GridCounter: React.FC<GridCounterProps> = ({
-  wagmiMode,
-  guessCounter,
-  giveUp,
-  shareText,
-  setGiveup,
-}) => {
+export const GridCounter: React.FC = () => {
+  const {
+    wagmiMode,
+    guessCounter,
+    giveUp,
+    setGiveup,
+    results,
+    activePuzzleIndex,
+  } = useGridContext();
+  const [shareText, setShareText] = React.useState("");
+
+  React.useEffect(() => {
+    setShareText(
+      generateShareText(results, guessCounter, wagmiMode, activePuzzleIndex + 1)
+    );
+  }, [results]);
+
   return (
     <div className="w-full grid place-content-center row-span-3">
       <div className="text-center text-xs uppercase">guesses left</div>

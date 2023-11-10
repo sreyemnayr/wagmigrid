@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "../styles/build.css";
 
+import { GridProvider } from "@/context/GridContext";
+
 export const metadata: Metadata = {
   title: "Immaculate Vibes Grid presented by Plague Poppets",
   description:
@@ -14,7 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <GridProvider>{children}</GridProvider>
+      </body>
     </html>
   );
 }

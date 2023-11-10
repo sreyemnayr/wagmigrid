@@ -1,9 +1,8 @@
 [
-    "Select an NFT collection for each cell using the clues that correspond to that cells rows and columns.",
-    "Collections in the drop down are ordered by all-time sales volume and they must be exact.",
-    "Each game, you have nine guesses to fill out the grid.",
-    "Each NFT collection, whether correct or incorrect, will count as one of your nine guesses.",
-    "If an image pops up, congratulations -- you got it right you little degen.",
-    "A collection cannot be used twice.",
-    "If a clue is a trait, it will count whether the trait is the category or value."
+  "Guess an NFT collection for each cell using the clues that correspond to that cells rows and columns.",
+  "You have nine guesses to fill out the grid.",
+  "Each guess, whether correct or incorrect, counts as one of your nine guesses.",
+  "If an image pops up, congratulations -- you got it right!",
+  "A collection cannot be used twice.",
+  "If a clue is a trait, it will count whether the trait is the category or value."
 ]
