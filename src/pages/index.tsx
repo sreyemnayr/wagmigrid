@@ -19,7 +19,7 @@ const titan = Titan_One({ weight: "400", subsets: ['latin'] })
 
 const now = new Date();
 const fullDaysSinceEpoch = Math.floor(now.getTime() / 8.64e7);
-const puzzle_number = fullDaysSinceEpoch - 19668;
+const puzzle_number = fullDaysSinceEpoch - 19669;
 
 interface Guesses {
   [key: string]: {
