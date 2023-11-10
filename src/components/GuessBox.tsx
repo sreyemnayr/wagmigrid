@@ -45,7 +45,6 @@ export const GuessBox: React.FC<GuessBoxProps> = ({
   inputRef,
 }) => {
   const handleClick = () => {
-    inputRef?.current?.focus();
     if (!image) {
       openGuessModal(side_trait, top_trait);
     }
@@ -59,7 +58,10 @@ export const GuessBox: React.FC<GuessBoxProps> = ({
         image === "" && give_up ? "opacity-10 hover:opacity-80" : ""
       }`}
       disabled={!!image}
-      onClick={handleClick}
+      onClick={() => {
+        inputRef?.current?.focus();
+        handleClick();
+      }}
     >
       {image !== "" && (
         <>

@@ -108,6 +108,8 @@ export const GuessModal: React.FC<GuessModalProps> = ({
         as="div"
         className="fixed inset-0 md:inset-24 z-10 overflow-hidden"
         onClose={closeModal}
+        unmount={false}
+        initialFocus={inputRef}
       >
         <div className="min-h-screen px-4 text-center">
           <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
