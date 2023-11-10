@@ -1738,6 +1738,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"schema-dts@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "schema-dts@npm:1.1.2"
+  peerDependencies:
+    typescript: ">=4.1.0"
+  checksum: bcca8719b1bb1cd71ba2b01a5126b3579e917a2f193e10fcffe020fa42fef911776ed9d2197c9f376780e703994b3ab854db3f962c47064f7282f41eff0f1d24
+  languageName: node
+  linkType: hard
+
 "semver@npm:^7.3.5":
   version: 7.5.4
   resolution: "semver@npm:7.5.4"
@@ -1999,6 +2008,7 @@ __metadata:
     prisma: "npm:^5.5.2"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
+    schema-dts: "npm:^1.1.2"
     tailwindcss: "npm:^3.3.5"
     typescript: "npm:5.2.2"
   languageName: unknown
