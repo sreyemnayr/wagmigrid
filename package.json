@@ -8,6 +8,7 @@
     "dev:next": "next dev",
     "dev:tailwind": "npx tailwindcss -i src/styles/style.css -o src/styles/build.css --minify --watch",
     "build": "yarn build:tailwind && yarn build:next",
+    "prebuild": "ts-node --esm ./scripts/prebuild.mjs",
     "build:next": "next build",
     "build:tailwind": "npx tailwindcss -i src/styles/style.css -o src/styles/build.css --minify",
     "update:all": "yarn upgrade-interactive",
@@ -30,6 +31,7 @@
     "@types/react": "18.2.33",
     "concurrently": "^8.2.2",
     "postcss": "8.4.31",
+    "ts-node": "^10.9.1",
     "typescript": "5.2.2"
   },
   "packageManager": "yarn@4.0.1",

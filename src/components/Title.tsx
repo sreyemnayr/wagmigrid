@@ -1,10 +1,8 @@
 import React from "react";
 
 import { Poppet } from "@/assets/PoppetSVG";
-import { Asap_Condensed, Titan_One } from "next/font/google";
 
-const asap = Asap_Condensed({ weight: "400", subsets: ["latin"] });
-const titan = Titan_One({ weight: "400", subsets: ["latin"] });
+import { asap, titan } from "@/util/fonts";
 
 const Title: React.FC = () => {
   return (

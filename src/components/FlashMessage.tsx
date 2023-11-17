@@ -2,9 +2,7 @@
 import { Transition } from "@headlessui/react";
 import { useEffect, useState } from "react";
 
-import { Asap_Condensed } from "next/font/google";
-
-const asap = Asap_Condensed({ weight: "600", subsets: ["latin"] });
+import { asapBold as asap } from "@/util/fonts";
 
 interface FlashMessageProps {
   show: boolean;

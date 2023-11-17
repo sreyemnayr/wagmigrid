@@ -5,6 +5,9 @@ const nextConfig = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  env: {
+    NEXT_PUBLIC_MODE: process.env.NEXT_PUBLIC_MODE,
+  },
 };
 
 module.exports = nextConfig;

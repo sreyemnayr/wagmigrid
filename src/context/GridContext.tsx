@@ -65,13 +65,8 @@ export const GridProvider: React.FC<{ children: React.ReactNode }> = ({
   const all_puzzles: string[][] = require("@/data/puzzles.json");
   const now = new Date();
   const fullDaysSinceEpoch = Math.floor(now.getTime() / 8.64e7);
-  const puzzle_number = fullDaysSinceEpoch - 19669;
-  const puzzles = all_puzzles.slice(0, puzzle_number + 1);
 
-  const total_collection_count = 2971;
-  const trait_criteria: {
-    [key: string]: number[];
-  } = require("@/data/trait_criteria.json");
+  const total_collection_count = 8281;
 
   const [side_traits, setSideTraits] = useState<string[]>([]);
   const [top_traits, setTopTraits] = useState<string[]>([]);
@@ -94,27 +89,77 @@ export const GridProvider: React.FC<{ children: React.ReactNode }> = ({
   const [giveUp, setGiveup] = useState<boolean>(false);
   const [showRules, setShowRules] = useState<boolean>(false);
 
+  const [trait_criteria, setTraitCriteria] = useState<{
+    [key: string]: number[];
+  }>({});
+  const [puzzle_number, setPuzzleNumber] = useState<number>(0);
+  const [puzzles, setPuzzles] = useState<string[][]>([]);
+
   useEffect(() => {
-    setActivePuzzleIndex(puzzles.length - 1);
+    const loadTraitCriteria = async () => {
+      const data =
+        process.env.NEXT_PUBLIC_MODE === "development"
+          ? await import("@/data/trait_criteria.json")
+          : await import("@/data/trait_criteria_filtered.json");
+      setTraitCriteria(data.default);
+    };
+    const loadPuzzleNumber = async () => {
+      const num =
+        process.env.NEXT_PUBLIC_MODE == "development"
+          ? all_puzzles.length
+          : fullDaysSinceEpoch - 19669;
+      setPuzzleNumber(num);
+    };
+
+    loadTraitCriteria();
+    loadPuzzleNumber();
   }, []);
 
   useEffect(() => {
-    setActivePuzzle(puzzles[activePuzzleIndex]);
+    console.log("puzzle_number", puzzle_number);
+    setPuzzles(all_puzzles.slice(0, puzzle_number + 1));
+  }, [puzzle_number]);
+
+  useEffect(() => {
+    console.log("puzzles", puzzles);
+    setActivePuzzleIndex(puzzles.length - 1);
+  }, [puzzles]);
+
+  useEffect(() => {
+    console.log("activePuzzleIndex", activePuzzleIndex);
+    if (puzzles.length > 0 && activePuzzleIndex >= 0) {
+      setActivePuzzle(puzzles[activePuzzleIndex]);
+    }
   }, [activePuzzleIndex]);
 
   useEffect(() => {
+    console.log("activePuzzle", activePuzzle);
+    console.log(activePuzzle);
+    if (activePuzzle.length === 0) return;
     setSideTraits(activePuzzle.slice(0, 3));
     setTopTraits(activePuzzle.slice(3, 6));
   }, [JSON.stringify(activePuzzle)]);
 
   useEffect(() => {
+    console.log("side_traits || top_traits", side_traits, top_traits);
     if (side_traits.length > 0 && top_traits.length > 0) {
       setResults(resetGuesses(side_traits, top_traits, "") as Guesses);
     }
   }, [JSON.stringify(side_traits), JSON.stringify(top_traits)]);
 
   useEffect(() => {
-    if (side_traits.length > 0 && top_traits.length > 0) {
+    console.log(
+      "side_traits || top_traits || ping || trait_criteria",
+      side_traits,
+      top_traits,
+      ping,
+      trait_criteria
+    );
+    if (
+      side_traits.length > 0 &&
+      top_traits.length > 0 &&
+      Object.keys(trait_criteria).length > 0
+    ) {
       const top_choices: GuessesDefaults = resetGuesses(
         side_traits,
         top_traits,
@@ -125,6 +170,10 @@ export const GridProvider: React.FC<{ children: React.ReactNode }> = ({
         top_traits,
         0
       ) as GuessesDefaults;
+      console.log(side_traits);
+      console.log(top_traits);
+      console.log(trait_criteria);
+      console.log(ping);
 
       let total_num_possible = 0;
 
@@ -147,7 +196,12 @@ export const GridProvider: React.FC<{ children: React.ReactNode }> = ({
           0
       );
     }
-  }, [JSON.stringify(side_traits), JSON.stringify(top_traits), ping]);
+  }, [
+    JSON.stringify(side_traits),
+    JSON.stringify(top_traits),
+    JSON.stringify(trait_criteria).length,
+    ping,
+  ]);
 
   React.useEffect(() => {
     const isModalClosed = localStorage.getItem("isModalClosed");

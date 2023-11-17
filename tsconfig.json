@@ -34,7 +34,9 @@
     "modules.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "scripts/prebuild.mjs",
+    "scripts/pre-build/00_treeshake_criteria.mjs"
   ],
   "exclude": ["node_modules"]
 }

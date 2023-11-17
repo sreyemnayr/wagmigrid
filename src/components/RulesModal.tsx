@@ -3,10 +3,9 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 
 import Poppet from "@/assets/PoppetSVG";
-import { Asap_Condensed } from "next/font/google";
-import { Button } from "./Button";
 
-const asap = Asap_Condensed({ weight: "200", subsets: ["latin"] });
+import { asapLight as asap, asapBold } from "@/util/fonts";
+import { Button } from "./Button";
 
 interface RulesModalProps {
   open: boolean;
@@ -35,7 +34,10 @@ export const RulesModal: React.FC<RulesModalProps> = ({
           </span>
 
           <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-slate-700 shadow-xl rounded-2xl">
-            <Dialog.Title as="h3" className="text-xl leading-6 text-center">
+            <Dialog.Title
+              as="h3"
+              className={`text-xl leading-6 text-center ${asapBold.className}`}
+            >
               How to play Immaculate Vibes Grid
             </Dialog.Title>
             <Dialog.Description as="div" className="mt-2">
@@ -48,7 +50,10 @@ export const RulesModal: React.FC<RulesModalProps> = ({
               </ul>
             </Dialog.Description>
 
-            <Dialog.Title as="h3" className="text-xl mt-6 leading-6  ">
+            <Dialog.Title
+              as="h3"
+              className={`text-xl leading-6 mt-6 text-center ${asapBold.className}`}
+            >
               <Poppet className="inline h-[1.5em] mr-2" />
               Who are the Plague Poppets?
             </Dialog.Title>

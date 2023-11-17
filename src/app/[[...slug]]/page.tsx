@@ -6,8 +6,6 @@ import { GuessModal } from "@/components/GuessModal";
 import { RulesModal } from "@/components/RulesModal";
 import React from "react";
 
-import { Asap_Condensed, Titan_One } from "next/font/google";
-
 import { Button } from "@/components/Button";
 import GridCounter from "@/components/GridCounter";
 import Title from "@/components/Title";
@@ -22,8 +20,7 @@ const corners = [
   ["bl", "none", "br"],
 ];
 
-const asap = Asap_Condensed({ weight: "400", subsets: ["latin"] });
-const titan = Titan_One({ weight: "400", subsets: ["latin"] });
+import { asap } from "@/util/fonts";
 
 const total_collection_count = 2971;
 
@@ -127,17 +124,20 @@ const Page = ({ params }: { params: { slug: string[] } }) => {
       />
       <RulesModal open={showRules} close={closeRulesModal} />
 
-      <div className="my-auto grid grid-cols-5 grid-rows-5 gap-px w-[80vh] max-w-[95vw] md:max-w-[80vw] aspect-square text-xs md:text-sm grid-flow-dense">
+      <div
+        className="my-auto grid grid-cols-5 grid-rows-5 gap-px w-[80vh] max-w-[95vw] md:max-w-[80vw] aspect-square text-xs md:text-sm grid-flow-dense"
+        key={`traits_grid`}
+      >
         <div></div>
         {top_traits.map((trait, i) => (
-          <CategoryLabel label={trait} key={`top_label_${i}`} />
+          <CategoryLabel label={trait} key={`top_label_${trait}x${i}`} />
         ))}
 
         <div></div>
 
         {side_traits.map((side_trait, i) => (
-          <>
-            <CategoryLabel label={side_trait} key={`side_label_${i}`} />
+          <React.Fragment key={`side_trait_${i}`}>
+            <CategoryLabel label={side_trait} />
             {top_traits.map((top_trait, j) => (
               <GuessBox
                 side_trait={side_trait}
@@ -149,11 +149,11 @@ const Page = ({ params }: { params: { slug: string[] } }) => {
                 top_guess={topChoices?.[side_trait]?.[top_trait]}
                 give_up={giveUp}
                 number_possible={numberPossible?.[side_trait]?.[top_trait]}
-                key={`guess_box_${i}_${j}`}
+                key={`guess_box_${top_trait}x${side_trait}x${i}_${j}`}
               />
             ))}
-            {i == 0 && <GridCounter key="grid_counter" />}
-          </>
+            {i == 0 && <GridCounter key={`grid_counterx${side_trait}`} />}
+          </React.Fragment>
         ))}
 
         <div></div>
